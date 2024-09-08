@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic resume</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      display: flex;
+      justify-content: space-between;
+    }
+    .form-container, .resume-preview {
+      width: 48%;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    .resume-section {
+      margin-bottom: 20px;
+    }
+    .download-btn {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Dynamic resume</h1>
+  <div class="container">
+    <!-- Form Section -->
+    <div class="form-container">
+      <h2>Fill Your Details</h2>
+      <form id="resume-form">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="text" id="title" placeholder="Job Title" required>
+        <textarea id="summary" placeholder="Professional Summary"></textarea>
+        <input type="text" id="contact" placeholder="Contact Information" required>
+        <textarea id="experience" placeholder="Work Experience"></textarea>
+        <textarea id="education" placeholder="Education"></textarea>
+        <textarea id="skills" placeholder="Skills"></textarea>
+      </form>
+      <button class="download-btn" onclick="downloadResume()">Download Resume</button>
+    </div>
+
+    <!-- Resume Preview Section -->
+    <div class="resume-preview">
+      <h2>Live Resume Preview</h2>
+      <div class="resume-section" id="preview-name">John Doe</div>
+      <div class="resume-section" id="preview-title">Software Engineer</div>
+      <div class="resume-section" id="preview-summary">Professional Summary...</div>
+      <div class="resume-section" id="preview-contact">Contact Info...</div>
+      <div class="resume-section" id="preview-experience">Experience...</div>
+      <div class="resume-section" id="preview-education">Education...</div>
+      <div class="resume-section" id="preview-skills">Skills...</div>
+    </div>
+  </div>
+
+  <script>
+    // Update the live preview as the user types
+    const formElements = document.querySelectorAll('#resume-form input, #resume-form textarea');
+
+    formElements.forEach(element => {
+      element.addEventListener('input', () => {
+        document.getElementById(`preview-${element.id}`).textContent = element.value || `${element.placeholder}...`;
+      });
+    });
+
+    // Function to download the resume as a PDF
+    function downloadResume() {
+      const resumeContent = document.querySelector('.resume-preview').innerHTML;
+      const opt = {
+        margin: 1,
+        filename: 'resume.pdf',
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      html2pdf().from(resumeContent).set(opt).save();
+    }
+  </script>
+
+  <!-- Add the html2pdf library -->
+  <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+</body>
+</html>
